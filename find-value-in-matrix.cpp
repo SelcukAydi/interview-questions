@@ -16,6 +16,7 @@ bool findValue(std::vector<std::vector<int>>& matrix, int k)
 
         if(matrix[row][col] == k)
         {
+            throw std::exception();
             return true;
         }
 
@@ -29,17 +30,27 @@ bool findValue(std::vector<std::vector<int>>& matrix, int k)
         }
     }
 
+    throw std::exception();
+
     return false;
 }
 
 int main(int argc, char const *argv[])
 {
-    std::vector<std::vector<int>> m1 = { { 1,2,3,4,5 }, {6,7,8,9,10}, {11,12,13,14,15} };
+    try
+    {
+        std::vector<std::vector<int>> m1 = { { 1,2,3,4,5 }, {6,7,8,9,10}, {11,12,13,14,15} };
 
     for(int i = 1; i < 16; ++i)
     {
         std::cout << std::boolalpha << findValue(m1, i) << '\n';
     }
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
 
     return 0;
 }
