@@ -1,6 +1,6 @@
 /**
  * Link: https://leetcode.com/problems/distant-barcodes/
-*/
+ */
 
 #include <iostream>
 #include <array>
@@ -11,7 +11,7 @@
 
 void printVector(const std::vector<int>& v)
 {
-    for(int i = 0; i < v.size(); ++i)
+    for (int i = 0; i < v.size(); ++i)
     {
         std::cout << v[i] << ' ';
     }
@@ -24,7 +24,7 @@ void printVector(const std::vector<int>& v)
  * The remaining barcodes can be put in any order.
  * @param barcodes The array to work on.
  * @returns The rearranged array.
-*/
+ */
 std::vector<int> solve(std::vector<int>& barcodes)
 {
     int n = barcodes.size();
@@ -33,7 +33,7 @@ std::vector<int> solve(std::vector<int>& barcodes)
 
     // We need the barcode having the most frequency.
     //
-    for(int i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i)
     {
         max_freq = std::max(++freqs[barcodes[i]], max_freq);
         max_barcode = freqs[barcodes[i]] == max_freq ? barcodes[i] : max_barcode;
@@ -43,7 +43,7 @@ std::vector<int> solve(std::vector<int>& barcodes)
 
     // Let's put the most frequency barcode first.
     //
-    while(freqs[max_barcode]-- > 0)
+    while (freqs[max_barcode]-- > 0)
     {
         barcodes[pos] = max_barcode;
         pos += 2;
@@ -59,9 +59,9 @@ std::vector<int> solve(std::vector<int>& barcodes)
 
     // Put the other barcodes till their frequency goes to zero.
     //
-    for(int i = 1; i < freqs.size(); ++i)
+    for (int i = 1; i < freqs.size(); ++i)
     {
-        while(freqs[i]-- > 0)
+        while (freqs[i]-- > 0)
         {
             barcodes[pos] = i;
             pos = pos + 2 < n ? pos + 2 : 1;
@@ -75,7 +75,7 @@ std::vector<int> solve(std::vector<int>& barcodes)
  * @brief Rearranges the array on O(logn). It first puts the most frequency barcode and then the second one.
  * @param barcodes The array to work on.
  * @returns The rearranged array.
-*/
+ */
 std::vector<int> solve_with_map(const std::vector<int>& barcodes)
 {
     std::priority_queue<std::pair<int, int>> pq;
@@ -83,26 +83,28 @@ std::vector<int> solve_with_map(const std::vector<int>& barcodes)
     std::size_t n = barcodes.size();
     std::vector<int> ans;
 
-    if(n <= 1) return barcodes;
+    if (n <= 1)
+        return barcodes;
 
-    for(int i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i)
     {
         map[barcodes[i]]++;
     }
 
-    for(auto itr = map.begin(); itr != map.end(); ++itr)
+    for (auto itr = map.begin(); itr != map.end(); ++itr)
     {
         pq.push({itr->second, itr->first});
     }
 
-    while(pq.top().first > 0)
+    while (pq.top().first > 0)
     {
         auto p1 = pq.top();
         pq.pop();
         ans.push_back(p1.second);
         p1.first--;
 
-        if(ans.size() == n) break;
+        if (ans.size() == n)
+            break;
 
         auto p2 = pq.top();
         pq.pop();
@@ -116,23 +118,23 @@ std::vector<int> solve_with_map(const std::vector<int>& barcodes)
     return ans;
 }
 
-int main(int argc, char const *argv[])
+int main(int argc, char const* argv[])
 {
-    std::vector<int> v1 = { 1,1,1,1,2,2,3,3 };
+    std::vector<int> v1 = {1, 1, 1, 1, 2, 2, 3, 3};
     auto ans1 = solve(v1);
     printVector(ans1);
 
-    std::vector<int> v2 = { 1,1,1,1,2,2,3,3,4,4,5 };
+    std::vector<int> v2 = {1, 1, 1, 1, 2, 2, 3, 3, 4, 4, 5};
     auto ans2 = solve(v2);
     printVector(ans2);
 
-    std::vector<int> v3 = { 1,1,1,2,2,2 };
-    auto ans3    = solve_with_map(v3);
+    std::vector<int> v3 = {1, 1, 1, 2, 2, 2};
+    auto ans3 = solve_with_map(v3);
     printVector(ans3);
 
-    std::vector<int> v4 = { 1 };
-    auto ans4    = solve_with_map(v4);
+    std::vector<int> v4 = {1};
+    auto ans4 = solve_with_map(v4);
     printVector(ans4);
-    
+
     return 0;
 }

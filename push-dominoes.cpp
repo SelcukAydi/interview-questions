@@ -84,18 +84,41 @@ std::string solution1(const std::string& str)
     return ans;
 }
 
+
 /**
- * @brief Uses two pointers. The first pointer holds the latest right force
- * while the second pointer holds the current left force.
+ * @brief Simulates the falling of dominoes based on initial forces.
  * 
- * @param str Input dominoes.
- * @return std::string The final positions of each dominoes.
+ * This function takes a string representing a row of dominoes and simulates
+ * how they fall over time based on the forces applied to them. The input string
+ * contains the following characters:
+ * - 'L': A domino that is pushed to the left.
+ * - 'R': A domino that is pushed to the right.
+ * - '.': A domino that is standing upright and has no force applied yet.
+ * 
+ * The function calculates the final state of the dominoes after all forces
+ * have been resolved.
+ * 
+ * @param str A reference to the input string representing the initial state
+ *            of the dominoes.
+ * @return A string representing the final state of the dominoes after all
+ *         forces have been applied.
+ * 
+ * @note The function assumes that the input string is non-empty.
+ * @note There is another optimized solution at https://leetcode.com/problems/push-dominoes/submissions/1620295287/
+ * 
+ * @example
+ * Input:  ".L.R...LR..L.."
+ * Output: "LL.RR.LLRRLL.."
+ * 
+ * Input:  "RR.L"
+ * Output: "RR.L"
  */
 std::string solution2(std::string& str)
 {
     std::string ans = str;
     std::size_t N = str.size();
     int last_right_force = -1;
+    int last_left_force = 0;
 
     for(int i = 0; i < N; ++i)
     {
@@ -106,7 +129,7 @@ std::string solution2(std::string& str)
                 // There is no any previous right force.
                 // All the stones will fall to the left side.
                 //
-                for(int j = 0; j < i; ++j)
+                for(int j = last_left_force; j < i; ++j)
                 {
                     ans[j] = 'L';
                 }
@@ -127,6 +150,8 @@ std::string solution2(std::string& str)
                 //
                 last_right_force = -1;
             }
+
+            last_left_force = i;
         }
         else if(str[i] == 'R')
         {
